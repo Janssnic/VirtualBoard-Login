@@ -1,5 +1,5 @@
 const express = require('express')
-const { PrismaClient } = require('@prisma/client')
+const { PrismaClient } = require('./generated/prisma')
 const prisma = new PrismaClient()
 require('dotenv').config()
 
