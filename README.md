@@ -1,8 +1,16 @@
 # VirtualBoard-Login
-Login for project
+## Login for project
 
+```bash
 npm install
+```
 
 prisma
+
+```bash
 npx prisma init
-npx prisma gerenate
+```
+
+```bash
+npx prisma generate
+```
