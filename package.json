@@ -1,0 +1,31 @@
+{
+  "name": "virtualboard-login",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/Janssnic/VirtualBoard-Login#readme",
+  "bugs": {
+    "url": "https://github.com/Janssnic/VirtualBoard-Login/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Janssnic/VirtualBoard-Login.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/server.js",
+    "dev": "nodemon -L src/server.js"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10",
+    "prisma": "^6.16.2"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.16.2",
+    "dotenv": "^16.6.1",
+    "express": "^5.1.0"
+  }
+}
