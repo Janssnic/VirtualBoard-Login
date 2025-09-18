@@ -1,33 +1,22 @@
 const express = require('express')
-const { PrismaClient } = require('./generated/prisma')
-const prisma = new PrismaClient()
-require('dotenv').config()
+const usersRouter = require('./routes/users')
 
-const app = express()
 const PORT = process.env.PORT || 8080
+
+require('dotenv').config()
+const app = express()
+
 
 console.log(`Node.js ${process.version}`)
 
 app.use(express.json())
 
-async function test() {
-    const users = await prisma.users.findMany()
-    console.log(users)
-    return users
-}
 
-
-
-app.get('/', async (req, res) => {
-    try {
-        const users = await prisma.users.findMany()
-        res.json({ msg: "Hello render", users })
-    } catch (error) {
-        console.error(error)
-        res.status(500).json({ error: "Internal Server Error" })
-    }
+app.get('/', (req, res) => {
+    res.json({ msg: "Hello render and prisma" })
 })
 
+app.use('/users', usersRouter)
 
 
 app.listen(PORT, () => {
