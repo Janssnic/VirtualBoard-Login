@@ -5,12 +5,22 @@ GET {{{{apiURL}}}}
 
 ###
 
-POST {{apiURL}}
+POST {{apiURL}}/register
 Content-Type: application/json
 
 {
     "name": "test",
     "lastname": "testing",
+    "email": "testing@testtt.com",
+    "password": "TESTtestTEST"
+}
+
+###
+
+POST {{apiURL}}/login
+Content-Type: application/json
+
+{
     "email": "testing@testt.com",
     "password": "TESTtestTEST"
 }
