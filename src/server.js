@@ -1,5 +1,6 @@
 const express = require('express')
 const usersRouter = require('./routes/users')
+const boardsRouter = require('./routes/boards')
 
 const PORT = process.env.PORT || 8080
 
@@ -17,6 +18,7 @@ app.get('/', (req, res) => {
 })
 
 app.use('/users', usersRouter)
+app.use('/boards', boardsRouter)
 
 
 app.listen(PORT, () => {
