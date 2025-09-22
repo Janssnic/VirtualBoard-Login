@@ -1,6 +1,9 @@
 const express = require('express')
 const { PrismaClient } = require('@prisma/client')
 const bcrypt = require("bcrypt");
+const jwt = require('jsonwebtoken');
+const authorize = require('../middleware/authorize');
+require('dotenv').config()
 
 const router = express.Router()
 const prisma = new PrismaClient()
@@ -69,7 +72,7 @@ router.post('/register', async (req, res) => {
 
 })
 
-router.post('/login', async (req, res) => {
+router.post('/login', authorize, async (req, res) => {
     const { email, password } = req.body //tar emot email och password
 
     //checkar att båda fält har blivit fyllda
@@ -94,9 +97,15 @@ router.post('/login', async (req, res) => {
             return res.status(400).json({ error: "Password not correct." });
         }
 
-        //JWT TOKEN HERE
+        const token = jwt.sign({
+            sub: user.id,
+            email: user.email,
+            name: user.name,
+            lastname: user.lastname,
+            role: user.role
+        })
 
-        res.json({ msg: "User logged in!", user: existingUser })
+        res.json({ msg: "User logged in!", user: existingUser, jwt: token })
         console.log("Login approved")
     } catch (error) {
         console.log(error)
