@@ -10,24 +10,24 @@ const prisma = new PrismaClient()
 
 router.get('/', async (req, res) => {
     try {
-       const allUsers = await prisma.users.findMany({
-        select: {
-            id: true,
-            name: true,
-            lastname: true,
-            role: true,
-            email: true,
-            created_at: true,
-            updated_at: true
-        }
-    })
-    res.json(allUsers) 
+        const allUsers = await prisma.users.findMany({
+            select: {
+                id: true,
+                name: true,
+                lastname: true,
+                role: true,
+                email: true,
+                created_at: true,
+                updated_at: true
+            }
+        })
+        res.json(allUsers)
     } catch (error) {
         console.error(error)
         res.status(500).json({ msg: "Error fetching users" })
     }
-    
-    
+
+
 })
 
 
@@ -103,7 +103,7 @@ router.post('/login', async (req, res) => {
             name: existingUser.name,
             lastname: existingUser.lastname,
             role: existingUser.role
-        }, process.env.JWT_SECRET, {expiresIn: '1h'})
+        }, process.env.JWT_SECRET, { expiresIn: '1h' })
 
         res.json({ msg: "User logged in!", user: existingUser.name, id: existingUser.id, jwt: token })
         console.log("Login approved")

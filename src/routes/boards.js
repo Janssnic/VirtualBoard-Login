@@ -1,13 +1,17 @@
 const express = require('express')
 const { PrismaClient } = require('@prisma/client')
+const authorize = require('../middleware/authorize')
 
 const router = express.Router()
 const prisma = new PrismaClient()
+
+router.use(authorize)
 
 //get alla boards
 router.get('/', async (req, res) => {
     try {
         const allBoards = await prisma.board.findMany({
+            where: {author_id: req.authUser.sub},
             select: {
                 id: true,
                 title: true,
@@ -28,7 +32,7 @@ router.get('/:id', async (req, res) => {
 
     try { //söker från users tabellen id:n
         const userBoards = await prisma.users.findUnique({
-            where: { id: userId },
+            where: { id: userId, author_id: req.authUser.sub},
             select: {
                 id: true,
                 name: true,
