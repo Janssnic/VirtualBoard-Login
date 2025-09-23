@@ -72,7 +72,7 @@ router.post('/register', async (req, res) => {
 
 })
 
-router.post('/login', authorize, async (req, res) => {
+router.post('/login', async (req, res) => {
     const { email, password } = req.body //tar emot email och password
 
     //checkar att båda fält har blivit fyllda
@@ -98,14 +98,14 @@ router.post('/login', authorize, async (req, res) => {
         }
 
         const token = jwt.sign({
-            sub: user.id,
-            email: user.email,
-            name: user.name,
-            lastname: user.lastname,
-            role: user.role
-        })
+            sub: existingUser.id,
+            email: existingUser.email,
+            name: existingUser.name,
+            lastname: existingUser.lastname,
+            role: existingUser.role
+        }, process.env.JWT_SECRET, {expiresIn: '1h'})
 
-        res.json({ msg: "User logged in!", user: existingUser, jwt: token })
+        res.json({ msg: "User logged in!", user: existingUser.name, id: existingUser.id, jwt: token })
         console.log("Login approved")
     } catch (error) {
         console.log(error)

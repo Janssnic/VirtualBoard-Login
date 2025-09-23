@@ -5,6 +5,11 @@ module.exports = (req, res, next) => {
     console.log('Authorize JWT')
     try {
         const authHeader = req.headers['authorization']
+
+        if (!authHeader || !authHeader.startsWith('Bearer ')) {
+            return res.status(401).json({ msg: "Missing or invalid Authorization header" })
+        }
+
         const token = authHeader.split(' ')[1]
 
         console.log(token)
@@ -13,7 +18,7 @@ module.exports = (req, res, next) => {
 
         req.authUser = user //sparar JWT:ns innehåll i requesten
 
-        console.log(`token valid for user: ${user.sub} ${user.name}`)
+        console.log(`token valid for user: ${user.sub} ${user.name} ${req.authUser}`)
 
         next()
 
