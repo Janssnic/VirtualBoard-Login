@@ -1,6 +1,16 @@
 @apiURL = http://localhost:8080/boards
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUsImVtYWlsIjoidGVzdGluZ0B0ZXN0dC5jb20iLCJuYW1lIjoidGVzdCIsImxhc3RuYW1lIjoidGVzdGluZyIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzU4Njk5NTcxLCJleHAiOjE3NTg3MDMxNzF9.HAFJ80YoZOyRxsetSDUWPBkvMYcbtuw7YG9l1TK_cZQ
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUsImVtYWlsIjoidGVzdGluZ0B0ZXN0dC5jb20iLCJuYW1lIjoidGVzdCIsImxhc3RuYW1lIjoidGVzdGluZyIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzU4NzA4MDkyLCJleHAiOjE3NTg3MTE2OTJ9.WhBe-i-fG9uM8Cu9QXOY6ioN7fOqqjYfGdAvZcMAkQw
 
 GET {{apiURL}}
 Authorization: Bearer {{token}}
+
+###
+
+POST {{apiURL}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "title": "test post board and member"
+}
 

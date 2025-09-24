@@ -54,6 +54,33 @@ router.get('/', async (req, res) => {
         console.error(error);
         res.status(500).json({ error: 'Failed to fetch user boards' });
     }
-});
+})
+
+//skapa en ny board
+router.post('/', async (req, res) => {
+    const { title } = req.body
+    const userId = parseInt(req.authUser.sub, 10) //hämtar user id från JWT som är en sträng och konverterar till nummer
+    console.log(`Creating board for user ID: ${userId}`)
+
+    if (!title) {
+        return res.status(400).json({ error: "Title is required." });
+    }
+    try {
+        //skapar en ny board i board tabellen
+        const newBoard = await prisma.board.create({
+            data: { title }
+        })
+        console.log(`New board created with ID: ${newBoard.id}`)
+        //lägger till den nya boarden i user_board tabellen med userId och boardId
+        await prisma.boardMember.create({
+            data: { userId: userId, boardId: newBoard.id }
+        })
+        console.log(`Board ID: ${newBoard.id} created by: ${userId}`)
+        res.status(201).json({ msg: "New board created!", board: newBoard })
+    } catch (error) {
+        console.error("Error creating board:", error)
+        res.status(500).json({ error: "Failed to create board." })
+    }
+})
 
 module.exports = router
