@@ -8,10 +8,10 @@ const prisma = new PrismaClient()
 router.use(authorize)
 
 //get alla boards
-router.get('/', async (req, res) => {
+/*router.get('/', async (req, res) => {
     try {
         const allBoards = await prisma.board.findMany({
-            where: {author_id: req.authUser.sub},
+            where: {userId: req.authUser.sub},
             select: {
                 id: true,
                 title: true,
@@ -25,17 +25,16 @@ router.get('/', async (req, res) => {
     }
 
 
-})
+})*/
 
-router.get('/:id', async (req, res) => {
-    const userId = parseInt(req.params.id, 10);
+router.get('/', async (req, res) => {
+    const userId = parseInt(req.authUser.sub, 10) //hämtar user id från JWT
 
     try { //söker från users tabellen id:n
         const userBoards = await prisma.users.findUnique({
-            where: { id: userId, author_id: req.authUser.sub},
+            where: { id: userId },
             select: {
                 id: true,
-                name: true,
                 boards: { //väljer boards som user är med i
                     select: {
                         board: {

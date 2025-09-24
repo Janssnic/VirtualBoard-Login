@@ -1,4 +1,6 @@
 @apiURL = http://localhost:8080/boards
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUsImVtYWlsIjoidGVzdGluZ0B0ZXN0dC5jb20iLCJuYW1lIjoidGVzdCIsImxhc3RuYW1lIjoidGVzdGluZyIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzU4Njk5NTcxLCJleHAiOjE3NTg3MDMxNzF9.HAFJ80YoZOyRxsetSDUWPBkvMYcbtuw7YG9l1TK_cZQ
 
-GET {{{{apiURL}}}}/2
+GET {{apiURL}}
+Authorization: Bearer {{token}}
 
