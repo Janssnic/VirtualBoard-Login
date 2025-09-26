@@ -103,7 +103,7 @@ router.post('/login', async (req, res) => {
             name: existingUser.name,
             lastname: existingUser.lastname,
             role: existingUser.role
-        }, process.env.JWT_SECRET, { expiresIn: '1h' })
+        }, process.env.JWT_SECRET, { expiresIn: '24h' })
 
         res.json({ msg: "User logged in!", user: existingUser.name, id: existingUser.id, jwt: token })
         console.log("Login approved")
