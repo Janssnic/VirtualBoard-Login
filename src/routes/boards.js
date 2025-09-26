@@ -1,6 +1,7 @@
 const express = require('express')
 const { PrismaClient } = require('@prisma/client')
 const authorize = require('../middleware/authorize')
+//const { use } = require('react')
 
 const router = express.Router()
 const prisma = new PrismaClient()
@@ -80,6 +81,72 @@ router.post('/', async (req, res) => {
     } catch (error) {
         console.error("Error creating board:", error)
         res.status(500).json({ error: "Failed to create board." })
+    }
+})
+
+router.post('/:id', async (req, res) => {
+    const boardId = parseInt(req.params.id, 10)
+    const existingUser = parseInt(req.authUser.sub, 10)
+    const newUserEmail = (req.body.email || "").toLowerCase().trim()
+
+    if (!newUserEmail) {
+        return res.status(400).json({ msg: "Email is required" })
+    }
+
+    try {
+
+        const existingMember = await prisma.boardMember.findFirst({
+            where: { boardId: boardId, userId: existingUser }
+        })
+
+        if (!existingMember) {
+            return res.status(403).json({ msg: "Not authorized to add members to this board" })
+        }
+
+        const newUser = await prisma.users.findUnique({
+            where: { email: newUserEmail }
+        })
+        if (!newUser) {
+            return res.status(404).json({ msg: "Email not found" })
+        }
+        const newMember = await prisma.boardMember.create({
+            data: { userId: newUser.id, boardId: boardId }
+        })
+        res.status(201).json({msg: "New member added!", member: newMember})
+        
+
+    } catch (error) {
+        console.error(error)
+        return res.status(500).json({ msg: "Error checking board membership" })
+    }
+})
+
+//ta bort en board
+router.delete('/:id', async (req, res) => {
+    const boardId = parseInt(req.params.id, 10)
+    const userId = parseInt(req.authUser.sub, 10)
+
+    try {
+        // Check if the user is a member of the board before deleting
+        const boardMember = await prisma.boardMember.findFirst({
+            where: { boardId: boardId, userId: userId }
+        })
+
+        if (!boardMember) {
+            return res.status(403).json({ msg: "Not authorized to delete this board" })
+        }
+
+        await prisma.boardMember.deleteMany({
+            where: { boardId: boardId },
+        })
+
+        const deletedBoard = await prisma.board.delete({
+            where: { id: boardId },
+        })
+        res.json(deletedBoard)
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({ msg: "Error deleting board" })
     }
 })
 
