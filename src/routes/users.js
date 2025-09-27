@@ -8,27 +8,27 @@ require('dotenv').config()
 const router = express.Router()
 const prisma = new PrismaClient()
 
-router.get('/', async (req, res) => {
-    try {
-       const allUsers = await prisma.users.findMany({
-        select: {
-            id: true,
-            name: true,
-            lastname: true,
-            role: true,
-            email: true,
-            created_at: true,
-            updated_at: true
-        }
-    })
-    res.json(allUsers) 
-    } catch (error) {
-        console.error(error)
-        res.status(500).json({ msg: "Error fetching users" })
-    }
+// router.get('/', async (req, res) => {
+//     try {
+//        const allUsers = await prisma.users.findMany({
+//         select: {
+//             id: true,
+//             name: true,
+//             lastname: true,
+//             role: true,
+//             email: true,
+//             created_at: true,
+//             updated_at: true
+//         }
+//     })
+//     res.json(allUsers) 
+//     } catch (error) {
+//         console.error(error)
+//         res.status(500).json({ msg: "Error fetching users" })
+//     }
     
     
-})
+// })
 
 
 
