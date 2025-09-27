@@ -1,4 +1,33 @@
 @apiURL = http://localhost:8080/boards
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUsImVtYWlsIjoidGVzdGluZ0B0ZXN0dC5jb20iLCJuYW1lIjoidGVzdCIsImxhc3RuYW1lIjoidGVzdGluZyIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzU4ODczNDg1LCJleHAiOjE3NTg5NTk4ODV9.imV3Jo7MGGorGHfgIQlfojhkEKbU-qWLyyr3C1HbqpU
 
-GET {{{{apiURL}}}}/2
+GET {{apiURL}}
+Authorization: Bearer {{token}}
+
+###
+
+POST {{apiURL}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "title": "test delete function"
+}
+
+###
+
+POST {{apiURL}}/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "email": "testing@testtt.com"
+}
+
+###
+
+DELETE  {{apiURL}}/10
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
 

@@ -14,41 +14,24 @@ model users {
   email         String?       @unique @db.VarChar
   password_hash String?       @db.VarChar
   role          String?       @default(dbgenerated("USER")) @db.VarChar
-  boards        boardMember[]
-  notes         note[]
   created_at    DateTime?     @default(now()) @db.Timestamp(6)
   updated_at    DateTime?     @default(now()) @db.Timestamp(6)
+  boards        boardMember[]
 }
 
 model board {
   id        Int           @id @default(autoincrement())
   title     String
-  members   boardMember[]
-  notes     note[]
   createdAt DateTime      @default(now())
+  members   boardMember[]
 }
 
 model boardMember {
-  id      Int           @id @default(autoincrement())
+  id      Int   @id @default(autoincrement())
   userId  Int
   boardId Int
+  board   board @relation(fields: [boardId], references: [id])
+  user    users @relation(fields: [userId], references: [id])
 
-  user  users @relation(fields: [userId], references: [id])
-  board board @relation(fields: [boardId], references: [id])
-
-  @@unique([userId, boardId]) // inga duplicates, ingen användare två gånger i samma board
-}
-
-model note {
-  id        Int           @id @default(autoincrement())
-  content   String
-  x         Int // för poisitonering på boarden
-  y         Int // för poisitonering på boarden
-  userId    Int
-  boardId   Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  user  users @relation(fields: [userId], references: [id])
-  board board @relation(fields: [boardId], references: [id])
+  @@unique([userId, boardId])
 }
