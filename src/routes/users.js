@@ -63,6 +63,15 @@ router.post('/register', async (req, res) => {
                 password_hash: hashedPassword
             }
         })
+
+        const token = jwt.sign({
+            sub: existingUser.id,
+            email: existingUser.email,
+            name: existingUser.name,
+            lastname: existingUser.lastname,
+            role: existingUser.role
+        }, process.env.JWT_SECRET, { expiresIn: '24h' })
+
         res.json({ msg: "New user created!", user: newUser })
         console.log("user created")
     } catch (error) {
