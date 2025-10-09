@@ -8,6 +8,10 @@ require('dotenv').config()
 const router = express.Router()
 const prisma = new PrismaClient()
 
+//delete
+
+//post
+
 
 
 module.exports = router
