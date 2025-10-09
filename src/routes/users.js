@@ -105,6 +105,14 @@ router.post('/login', async (req, res) => {
             role: existingUser.role
         }, process.env.JWT_SECRET, { expiresIn: '24h' })
 
+        const refresh_token = jwt.sign({
+            sub: existingUser.id,
+            email: existingUser.email,
+            name: existingUser.name,
+            lastname: existingUser.lastname,
+            role: existingUser.role
+        }, process.env.JWT_SECRET, { expiresIn: '24h' })
+
         res.json({ msg: "User logged in!", user: existingUser.name, id: existingUser.id, jwt: token })
         console.log("Login approved")
     } catch (error) {
