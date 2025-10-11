@@ -1,5 +1,7 @@
 @apiURL = http://localhost:8080/boards
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUsImVtYWlsIjoidGVzdGluZ0B0ZXN0dC5jb20iLCJuYW1lIjoidGVzdCIsImxhc3RuYW1lIjoidGVzdGluZyIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzU4ODczNDg1LCJleHAiOjE3NTg5NTk4ODV9.imV3Jo7MGGorGHfgIQlfojhkEKbU-qWLyyr3C1HbqpU
+@apiURL2 = http://localhost:8080
+
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjE0LCJlbWFpbCI6Im5pY29AbmljbyIsIm5hbWUiOiJuaWNvIiwibGFzdG5hbWUiOiJuaWNvIiwicm9sZSI6InVzZXIiLCJpYXQiOjE3NjAxOTE5NTcsImV4cCI6MTc2MDE5MjU1N30.UCjA7hBPTIZYi5CEX8YfimkSQx2jA8IqLltamkP49Bk
 
 GET {{apiURL}}
 Authorization: Bearer {{token}}
@@ -30,4 +32,14 @@ DELETE  {{apiURL}}/10
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
+###
+
+POST {{apiURL2}}/refresh
+Authorization: Bearer {{ token }}
+Content-Type: application/json
+
+{
+    "expires_at": 1758959885,
+    "token": "testToken"
+}
 

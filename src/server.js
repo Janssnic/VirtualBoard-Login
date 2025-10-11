@@ -1,6 +1,7 @@
 const express = require('express')
 const usersRouter = require('./routes/users')
 const boardsRouter = require('./routes/boards')
+const refreshRouter = require('./routes/refresh')
 const cors = require('cors')
 const bodyParser = require('body-parser');
 
@@ -14,6 +15,8 @@ app.use(bodyParser.json());
 app.use(cors())
 app.use('/users', usersRouter)
 app.use('/boards', boardsRouter)
+app.use('/refresh', refreshRouter)
+
 
 
 console.log(`Node.js ${process.version}`)
