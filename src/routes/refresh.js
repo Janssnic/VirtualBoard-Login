@@ -15,7 +15,7 @@ router.use(authorize)
 router.post('/refresh', async (req, res) => {
     const { refresh_token, token } = req.body
 
-    if (!refresh_token || token) {
+    if (!refresh_token || !token) {
         return res.status(400).json({ error: 'Missing refresh or access token' })
     }
 
@@ -34,7 +34,7 @@ router.post('/refresh', async (req, res) => {
             return res.status(401).json({ error: 'Invalid access token' })
         }
         const existingUser = await prisma.users.findUnique({
-            where: { userId: token.sub }
+            where: { user_id: decoded.sub }
         })
 
         if (!existingUser) {
@@ -68,6 +68,7 @@ router.post('/token', async (req, res) => {
         const { refreshToken, expires_at } = req.body
         console.log(`Creating token for user ID: ${userId}`)
 
+        await prisma.refresh_tokens.deleteMany({ where: { user_id: userId } })
 
         const newToken = await prisma.refresh_tokens.create({
             data: {
