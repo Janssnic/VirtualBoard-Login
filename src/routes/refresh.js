@@ -2,7 +2,7 @@ const express = require('express')
 const { PrismaClient } = require('@prisma/client')
 const bcrypt = require("bcrypt");
 const jwt = require('jsonwebtoken');
-const authorize = require('../middleware/authorize');
+
 require('dotenv').config()
 
 const router = express.Router()
@@ -11,7 +11,7 @@ const prisma = new PrismaClient()
 // router.get('/', (req, res) => {
 //     res.send('Test endpoint is working!');
 // });
-router.use(authorize)
+
 router.post('/refresh', async (req, res) => {
     const { refresh_token, token } = req.body
 
@@ -61,6 +61,8 @@ router.post('/refresh', async (req, res) => {
     }
 })
 
+const authorize = require('../middleware/authorize')
+router.use(authorize)
 
 router.post('/token', async (req, res) => {
     console.log("token called")
