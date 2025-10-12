@@ -62,7 +62,7 @@ router.post('/refresh', async (req, res) => {
 })
 
 
-router.post('/', async (req, res) => {
+router.post('/token', async (req, res) => {
     try {
         const userId = parseInt(req.authUser.sub, 10) //hämtar user id från JWT som är en sträng och konverterar till nummer
         const { refreshToken, expires_at } = req.body
