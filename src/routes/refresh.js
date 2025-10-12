@@ -13,11 +13,13 @@ const prisma = new PrismaClient()
 // });
 //router.use(authorize)
 router.post('/refresh', async (req, res) => {
-    const { refresh_token } = req.body
+    const { refresh_token } = req.body.refresh_token
+    const { token } = req.body.token
 
     if (!refresh_token) {
         return res.status(400).json({ error: 'Missing refresh token' })
     }
+
 
     try {
         const storedToken = await prisma.refresh_tokens.findUnique({
@@ -28,9 +30,22 @@ router.post('/refresh', async (req, res) => {
             return res.status(401).json({ error: 'Invalid refresh token' })
         }
 
-//SIGNA RÄTT INFO HIT (SUB, NAME, LASTNAME, EMAIL)
+        try {
+            const existingUser = await prisma.users.findUnique({
+                where: { userId: token.sub }
+            })
+        } catch (error) {
+            return res.status(401).json({ error: 'Invalid access token' })
+        }
+
+        //SIGNA RÄTT INFO HIT (SUB, NAME, LASTNAME, EMAIL)
         const newAccessToken = jwt.sign(
-            { sub: storedToken.user_id },
+            {
+                sub: existingUser.id,
+                email: existingUser.email,
+                name: existingUser.name,
+                lastname: existingUser.lastname,
+            },
             process.env.JWT_SECRET,
             { expiresIn: '15m' }
         )
@@ -45,8 +60,8 @@ router.post('/refresh', async (req, res) => {
 
 
 router.post('/', async (req, res) => {
-    const userId = parseInt(req.refreshToken.sub, 10) //hämtar user id från JWT som är en sträng och konverterar till nummer
-    const expires_at = parseInt(req.refreshToken.expires_at, 10)
+    const userId = parseInt(req.body.refreshToken.sub, 10) //hämtar user id från JWT som är en sträng och konverterar till nummer
+    const expires_at = parseInt(req.body.refreshToken.expires_at, 10)
     console.log(`Creating token for user ID: ${userId}`)
 
     try {
