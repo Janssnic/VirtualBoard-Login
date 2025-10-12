@@ -11,7 +11,7 @@ const prisma = new PrismaClient()
 // router.get('/', (req, res) => {
 //     res.send('Test endpoint is working!');
 // });
-//router.use(authorize)
+router.use(authorize)
 router.post('/refresh', async (req, res) => {
     const { refresh_token, token } = req.body
 
@@ -63,15 +63,16 @@ router.post('/refresh', async (req, res) => {
 
 
 router.post('/', async (req, res) => {
-    const userId = parseInt(req.body.refreshToken.sub, 10) //hämtar user id från JWT som är en sträng och konverterar till nummer
-    const expires_at = parseInt(req.body.refreshToken.expires_at, 10)
-    console.log(`Creating token for user ID: ${userId}`)
-
     try {
+        const userId = parseInt(req.authUser.sub, 10) //hämtar user id från JWT som är en sträng och konverterar till nummer
+        const { refreshToken, expires_at } = req.body
+        console.log(`Creating token for user ID: ${userId}`)
+
+
         const newToken = await prisma.refresh_tokens.create({
             data: {
                 user_id: userId,
-                token: req.body.refreshToken,
+                token: refreshToken,
                 expires_at: expires_at
             }
         })
