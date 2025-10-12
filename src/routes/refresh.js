@@ -73,7 +73,7 @@ router.post('/token', async (req, res) => {
             data: {
                 user_id: userId,
                 token: refreshToken,
-                expires_at: expires_at
+                expires_at: new Date(expires_at)
             }
         })
         console.log(`New board created with ID: ${newToken.id}`)
