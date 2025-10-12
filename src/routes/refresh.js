@@ -13,16 +13,15 @@ const prisma = new PrismaClient()
 // });
 //router.use(authorize)
 router.post('/refresh', async (req, res) => {
-    const { refresh_token } = req.body.refresh_token
-    const { token } = req.body.token
+    const { refresh_token, token } = req.body
 
-    if (!refresh_token) {
-        return res.status(400).json({ error: 'Missing refresh token' })
+    if (!refresh_token || token) {
+        return res.status(400).json({ error: 'Missing refresh or access token' })
     }
 
 
     try {
-        const storedToken = await prisma.refresh_tokens.findUnique({
+        const storedToken = await prisma.refresh_tokens.findFirst({
             where: { token: refresh_token }
         });
 
@@ -30,12 +29,16 @@ router.post('/refresh', async (req, res) => {
             return res.status(401).json({ error: 'Invalid refresh token' })
         }
 
-        try {
-            const existingUser = await prisma.users.findUnique({
-                where: { userId: token.sub }
-            })
-        } catch (error) {
+        const decoded = jwt.decode(token)
+        if (!decoded?.sub) {
             return res.status(401).json({ error: 'Invalid access token' })
+        }
+        const existingUser = await prisma.users.findUnique({
+            where: { userId: token.sub }
+        })
+
+        if (!existingUser) {
+            return res.status(401).json({ error: 'User not found' })
         }
 
         //SIGNA RÄTT INFO HIT (SUB, NAME, LASTNAME, EMAIL)
@@ -68,7 +71,7 @@ router.post('/', async (req, res) => {
         const newToken = await prisma.refresh_tokens.create({
             data: {
                 user_id: userId,
-                token: token,
+                token: req.body.refreshToken,
                 expires_at: expires_at
             }
         })
