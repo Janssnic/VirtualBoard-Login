@@ -1,7 +1,8 @@
 const express = require('express')
 const { PrismaClient } = require('@prisma/client')
-const bcrypt = require("bcrypt");
-const jwt = require('jsonwebtoken');
+const bcrypt = require("bcrypt")
+const jwt = require('jsonwebtoken')
+const authorize = require('../middleware/authorize')
 
 require('dotenv').config()
 
@@ -61,10 +62,10 @@ router.post('/refresh', async (req, res) => {
     }
 })
 
-const authorize = require('../middleware/authorize')
-router.use(authorize)
 
-router.post('/token', async (req, res) => {
+// router.use(authorize)
+
+router.post('/token', authorize, async (req, res) => {
     console.log("token called")
     try {
         const userId = parseInt(req.authUser.sub, 10) //hämtar user id från JWT som är en sträng och konverterar till nummer
@@ -89,7 +90,7 @@ router.post('/token', async (req, res) => {
     }
 })
 
-router.delete('/', async (req, res) => {
+router.delete('/', authorize, async (req, res) => {
     const userId = parseInt(req.authUser.sub, 10)
     console.log(`Deleting tokens for user ID: ${userId}`)
 
