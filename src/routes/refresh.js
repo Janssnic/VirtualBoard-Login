@@ -45,7 +45,8 @@ router.post('/refresh', async (req, res) => {
 
 
 router.post('/', async (req, res) => {
-    const userId = parseInt(req.authUser.sub, 10) //hämtar user id från JWT som är en sträng och konverterar till nummer
+    const userId = parseInt(req.refreshToken.sub, 10) //hämtar user id från JWT som är en sträng och konverterar till nummer
+    const expires_at = parseInt(req.refreshToken.expires_at, 10)
     console.log(`Creating token for user ID: ${userId}`)
 
     try {
